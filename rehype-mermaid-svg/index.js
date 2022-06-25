@@ -10794,7 +10794,7 @@
   var { Headers, Request, Response } = globalThis;
   var lib_default = globalThis.fetch;
 
-  // index.ts
+  // plugin.ts
   function rehypeMermaidSvg(mermaidRendererDomain) {
     return (tree) => __async(this, null, function* () {
       const nodesToModify = [];
