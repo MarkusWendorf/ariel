@@ -1,12 +1,12 @@
-import { Transformer } from "unified";
+import { type Transformer } from "unified";
 import { visit } from "unist-util-visit";
 import { parseFragment } from "parse5";
 import { fromParse5 } from "hast-util-from-parse5";
 import { is } from "unist-util-is";
 import { isElement } from "hast-util-is-element";
-import { Element, matches } from "hast-util-select";
-import fetch from "node-fetch";
-import { Text } from "hast";
+import { type Element, matches } from "hast-util-select";
+import fetch from "@web-std/fetch";
+import type { Text } from "hast";
 
 export function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer {
   return async (tree) => {
