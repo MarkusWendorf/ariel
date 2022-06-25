@@ -5,7 +5,7 @@ import { fromParse5 } from "hast-util-from-parse5";
 import { is } from "unist-util-is";
 import { isElement } from "hast-util-is-element";
 import { type Element, matches } from "hast-util-select";
-import fetch from "@web-std/fetch";
+import fetch from "node-fetch";
 import type { Text } from "hast";
 
 export function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer {
