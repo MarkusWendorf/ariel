@@ -16305,7 +16305,7 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 function rehypeMermaidSvg(mermaidRendererDomain) {
   return async (tree) => {
     const nodesToModify = [];
-    visit(tree, (node, index, parent2) => {
+    visit(tree, (node, idx, parent2) => {
       if (!isElement(node) || !isElement(parent2)) {
         return;
       }
@@ -16313,13 +16313,12 @@ function rehypeMermaidSvg(mermaidRendererDomain) {
         return;
       }
       const diagramText = node.children[0];
-      if (!is(diagramText, "text")) {
-        return;
+      if (is(diagramText, "text") && diagramText.value) {
+        nodesToModify.push({
+          node: parent2,
+          svgBase64: btoa(diagramText.value)
+        });
       }
-      nodesToModify.push({
-        node: parent2,
-        svgBase64: btoa(diagramText.value)
-      });
     });
     await Promise.all(nodesToModify.map(({ node, svgBase64 }) => renderDiagramToNode(mermaidRendererDomain, node, svgBase64)));
   };
@@ -16333,12 +16332,12 @@ async function renderDiagramToNode(mermaidRendererDomain, parent2, svgBase64) {
   };
 }
 function svgToHtmlAst(svg3) {
-  const parsedSvg = parseFragment(svg3, {
+  const parsedSvg = parseFragment(svg3.trim(), {
     scriptingEnabled: false,
     sourceCodeLocationInfo: true,
     onParseError: (err) => console.log(err)
   });
-  const hastTree = fromParse5(parsedSvg.childNodes[0], { space: "svg" });
+  const hastTree = fromParse5(parsedSvg.childNodes[0], { space: "html" });
   if (!isElement(hastTree)) {
     throw new Error("Invalid hast tree returned while parsing svg");
   }
