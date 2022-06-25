@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "exports": "./index.ts",
+  "exports": "./index.js",
   "scripts": {
     "local": "tsx local.ts",
     "build": "esbuild index.ts --bundle  --outfile=index.js"
