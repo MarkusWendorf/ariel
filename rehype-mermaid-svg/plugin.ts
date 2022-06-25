@@ -12,7 +12,7 @@ export function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer {
   return async (tree) => {
     const nodesToModify: Array<{ node: Element; svgBase64: string }> = [];
 
-    visit(tree, (node, index, parent) => {
+    visit(tree, (node, idx, parent) => {
       /* Looking for a tree like this
         <pre>
           <code class="language-mermaid">  <-- node
@@ -32,14 +32,12 @@ export function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer {
       }
 
       const diagramText = node.children[0];
-      if (!is<Text>(diagramText, "text")) {
-        return;
+      if (is<Text>(diagramText, "text") && diagramText.value) {
+        nodesToModify.push({
+          node: parent,
+          svgBase64: btoa(diagramText.value),
+        });
       }
-
-      nodesToModify.push({
-        node: parent,
-        svgBase64: btoa(diagramText.value),
-      });
     });
 
     await Promise.all(
@@ -67,13 +65,13 @@ async function renderDiagramToNode(
 }
 
 function svgToHtmlAst(svg: string) {
-  const parsedSvg = parseFragment(svg, {
+  const parsedSvg = parseFragment(svg.trim(), {
     scriptingEnabled: false,
     sourceCodeLocationInfo: true,
     onParseError: (err) => console.log(err),
   });
 
-  const hastTree = fromParse5(parsedSvg.childNodes[0], { space: "svg" });
+  const hastTree = fromParse5(parsedSvg.childNodes[0], { space: "html" });
   if (!isElement(hastTree)) {
     throw new Error("Invalid hast tree returned while parsing svg");
   }
