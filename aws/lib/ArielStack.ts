@@ -2,9 +2,9 @@ import { Duration, Lazy, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { Code, Function, FunctionUrlAuthType, Runtime } from "aws-cdk-lib/aws-lambda";
-import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
-import * as path from "path";
+import { Distribution } from "aws-cdk-lib/aws-cloudfront";
 import { CachePolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
+import * as path from "path";
 
 export class ArielStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -13,7 +13,7 @@ export class ArielStack extends Stack {
     const func = new Function(this, "MermaidLambda", {
       runtime: Runtime.NODEJS_14_X,
       memorySize: 2048,
-      code: Code.fromAsset(path.join(process.cwd(), "..", "dist", "dist.zip")),
+      code: Code.fromAsset(path.join(__dirname, "..", "mermaid-headless-chrome", "dist", "dist.zip")),
       handler: "handler.handler",
     });
 
@@ -33,7 +33,7 @@ export class ArielStack extends Stack {
       },
     });
 
-    const distribution = new cloudfront.Distribution(this, "Cloudfront", {
+    new Distribution(this, "Cloudfront", {
       defaultBehavior: {
         origin: new HttpOrigin(apiDomain),
         cachePolicy: new CachePolicy(this, "CacheForeverPolicy", {
