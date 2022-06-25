@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": "./lib/plugin.js",
+  "types": "./lib/plugin.d.ts",
   "scripts": {
     "local": "tsx local.ts",
-    "build": "esbuild plugin.ts --bundle --format=esm --platform=node --target=node16 --outfile=index.js"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

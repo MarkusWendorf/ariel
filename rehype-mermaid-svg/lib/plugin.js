@@ -1,12 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { visit } from "unist-util-visit";
 import { parseFragment } from "parse5";
 import { fromParse5 } from "hast-util-from-parse5";
@@ -15,7 +6,7 @@ import { isElement } from "hast-util-is-element";
 import { matches } from "hast-util-select";
 import fetch from "node-fetch";
 export function rehypeMermaidSvg(mermaidRendererDomain) {
-    return (tree) => __awaiter(this, void 0, void 0, function* () {
+    return async (tree) => {
         const nodesToModify = [];
         visit(tree, (node, idx, parent) => {
             /* Looking for a tree like this
@@ -41,18 +32,16 @@ export function rehypeMermaidSvg(mermaidRendererDomain) {
                 });
             }
         });
-        yield Promise.all(nodesToModify.map(({ node, svgBase64 }) => renderDiagramToNode(mermaidRendererDomain, node, svgBase64)));
-    });
+        await Promise.all(nodesToModify.map(({ node, svgBase64 }) => renderDiagramToNode(mermaidRendererDomain, node, svgBase64)));
+    };
 }
-function renderDiagramToNode(mermaidRendererDomain, parent, svgBase64) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const svg = yield fetch(`https://${mermaidRendererDomain}/${svgBase64}`).then((response) => response.text());
-        parent.children[0] = svgToHtmlAst(svg);
-        parent.tagName = "div";
-        parent.properties = {
-            className: "diagram",
-        };
-    });
+async function renderDiagramToNode(mermaidRendererDomain, parent, svgBase64) {
+    const svg = await fetch(`https://${mermaidRendererDomain}/${svgBase64}`).then((response) => response.text());
+    parent.children[0] = svgToHtmlAst(svg);
+    parent.tagName = "div";
+    parent.properties = {
+        className: "diagram",
+    };
 }
 function svgToHtmlAst(svg) {
     const parsedSvg = parseFragment(svg.trim(), {

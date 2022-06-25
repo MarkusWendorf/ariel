@@ -3,7 +3,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { rehypeMermaidSvg } from "./plugin";
+import { rehypeMermaidSvg } from "./plugin.js";
 
 async function main() {
   const file = await unified()
