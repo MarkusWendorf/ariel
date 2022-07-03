@@ -1,5 +1,5 @@
 import { initChrome } from "./browser/chrome";
-import { writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { generateSvgDiagram } from "./render";
 import { base64ToString, stringToBase64 } from "./util/base64";
 
@@ -28,6 +28,11 @@ async function run(diagramBase64: string) {
 
   const diagram = base64ToString(diagramBase64);
   const svg = await generateSvgDiagram(chrome, diagram);
+
+  if (!existsSync("./dist")) {
+    mkdirSync("./dist");
+  }
+  
   writeFileSync("./dist/test.svg", svg);
 
   await chrome.close();

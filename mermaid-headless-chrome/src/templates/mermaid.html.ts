@@ -7,7 +7,7 @@ export default `
       <title>Page Titles</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-      <script>mermaid.initialize({ startOnLoad:false })</script>
+      <script>mermaid.initialize({ startOnLoad:false, themeVariables: { 'primaryColor': '#ff0000'} })</script>
     </head>
     <body>
     </body>

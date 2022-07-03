@@ -34,6 +34,7 @@ export class ArielStack extends Stack {
     });
 
     new Distribution(this, "Cloudfront", {
+      domainNames: ["mermaid.irrlicht.io"],
       defaultBehavior: {
         origin: new HttpOrigin(apiDomain),
         cachePolicy: new CachePolicy(this, "CacheForeverPolicy", {
