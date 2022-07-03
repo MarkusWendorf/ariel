@@ -6,7 +6,7 @@
   },
   "scripts": {
     "synth": "cdk synth",
-    "deploy": "npm run build --prefix ../ && cdk deploy",
+    "deploy": "npm run build --prefix ../mermaid-headless-chrome && cdk deploy",
     "destroy": "cdk destroy"
   },
   "devDependencies": {
