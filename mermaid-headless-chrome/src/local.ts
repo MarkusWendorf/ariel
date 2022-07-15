@@ -6,19 +6,8 @@ import { base64ToString, stringToBase64 } from "./util/base64";
 process.on("SIGINT", () => process.exit(0));
 
 run(
-  stringToBase64(`
-    sequenceDiagram
-    participant Äliße
-    participant Bob
-    Alice->>John: Hello John, how are you?
-    loop Healthcheck
-        John->>John: Fight against hypochondria
-    end
-    Note right of John: Rational thoughts <br/>prevail!
-    John-->>Alice: Great!
-    John->>Bob: How about you?
-    Bob-->>John: Jolly good!
-`),
+  stringToBase64(`flowchart LR
+  id1[[This is the text in the box]]`),
 );
 
 async function run(diagramBase64: string) {
@@ -32,7 +21,7 @@ async function run(diagramBase64: string) {
   if (!existsSync("./dist")) {
     mkdirSync("./dist");
   }
-  
+
   writeFileSync("./dist/test.svg", svg);
 
   await chrome.close();

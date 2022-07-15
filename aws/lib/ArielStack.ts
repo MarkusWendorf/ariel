@@ -1,4 +1,4 @@
-import { Duration, Lazy, Stack, StackProps } from "aws-cdk-lib";
+import { Duration, Fn, Lazy, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
@@ -9,10 +9,7 @@ import {
 } from "aws-cdk-lib/aws-lambda";
 import { Distribution } from "aws-cdk-lib/aws-cloudfront";
 import { CachePolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
-import {
-  Certificate,
-  CertificateValidation,
-} from "aws-cdk-lib/aws-certificatemanager";
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import * as path from "path";
 
 export class ArielStack extends Stack {
@@ -43,12 +40,7 @@ export class ArielStack extends Stack {
       },
     });
 
-    const apiDomain = Lazy.uncachedString({
-      produce: (context) => {
-        const resolved = context.resolve(endpoint.url);
-        return { "Fn::Select": [2, { "Fn::Split": ["/", resolved] }] } as any;
-      },
-    });
+    const apiDomain = Fn.parseDomainName(endpoint.url);
 
     const certificate = Certificate.fromCertificateArn(
       this,
