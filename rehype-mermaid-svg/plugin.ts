@@ -44,16 +44,11 @@ export function rehypeMermaidSvg(options: Options): Transformer {
       }
     });
 
-    const diagrams = await Promise.all(
-      nodesToModify.map(async (node) => {
-        const svg = await options.renderDiagram(node.diagram);
-        return svgToHtmlAst(svg);
-      })
-    );
+    for (const currentNode of nodesToModify) {
+      const diagram = await options.renderDiagram(currentNode.diagram);
+      const node = currentNode.node;
 
-    for (let i = 0; i < nodesToModify.length; i++) {
-      const node = nodesToModify[i].node;
-      node.children[0] = diagrams[i];
+      node.children[0] = svgToHtmlAst(diagram);
       node.tagName = "div";
       node.properties = {
         className: "diagram",
