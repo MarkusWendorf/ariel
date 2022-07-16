@@ -1,4 +1,5 @@
 const styles = {
+  fontFamily: "var(--fontFamily, 'trebuchet ms',verdana,arial,sans-serif)",
   textColor: "var(--textColor, #333)",
   mainBkg: "var(--mainBkg, #ECECFF)",
   edgeLabelBackground: "var(--edgeLabelBackground, #e8e8e8)",
@@ -10,8 +11,9 @@ const styles = {
   noteBorderColor: "var(--noteBorderColor, #aaaa33)",
 
   // sequence
-  actorTextColor: "var(--actorTextColor)",
-  actorBorder: "var(--actorBorder)",
+  actorTextColor: "var(--actorTextColor, black)",
+  actorBorder: "var(--actorBorder, hsl(260, 60%, 87%))",
+  sequenceNumberColor: "var(--sequenceNumberColor, white)",
 
   // class
   classText: "var(--textColor, #333)",
@@ -27,33 +29,28 @@ const styles = {
   activeTaskBkgColor: "var(--activeTaskBkgColor, #bfc7ff)",
   gridColor: "var(--gridColor, darkgrey)",
   doneTaskBkgColor: "var(--doneTaskBkgColor, lightgrey)",
-  doneTaskBorderColor: "var(--doneTaskBorderColor)",
+  doneTaskBorderColor: "var(--doneTaskBorderColor, grey)",
   critBorderColor: "var(--critBorderColor, #ff8888)",
   critBkgColor: "var(--critBkgColor, red)",
-  todayLineColor: "var(--todayLineColor)",
+  todayLineColor: "var(--todayLineColor, red)",
   taskTextColor: "var(--taskTextColor, white)",
-  taskTextOutsideColor: "var(--taskTextOutsideColor)",
+  taskTextOutsideColor: "var(--taskTextOutsideColor, black)",
   taskTextLightColor: "var(--taskTextLightColor, white)",
   taskTextDarkColor: "var(--taskTextDarkColor, #333)",
-  taskTextClickableColor: "var(--taskTextClickableColor)",
+  taskTextClickableColor: "var(--taskTextClickableColor, #003163)",
 
   // state
   transitionLabelColor: "var(--textColor, #333)",
   transitionColor: "var(--lineColor, #333)",
+  stateBkg: "var(--stateBkg, #ECECFF)",
+  compositeBackground: "var(--compositeBackground, white)",
+  stateLabelColor: "var(--textColor, #333)",
+  altBackground: "var(--altBackground, #f0f0f0)",
+  compositeTitleBackground: "var(--compositeTitleBackground, #ECECFF)",
 
   // pie
-  pie1: "var(--pie1, rgb(255, 255, 222))",
-  pie2: "var(--pie2, rgb(236, 236, 255))",
-  pie3: "var(--pie3, rgb(181, 255, 32))",
-  pie4: "var(--pie4, rgb(185, 185, 255))",
-  pie5: "var(--pie5, rgb(185, 185, 40))",
-  pie6: "var(--pie6, rgb(255, 255, 69))",
-  pie7: "var(--pie7, rgb(215, 255, 134))",
-  pie8: "var(--pie8, rgb(255, 134, 255))",
-  pie9: "var(--pie9, rgb(32, 255, 255))",
-  pie10: "var(--pie10, rgb(255, 32, 32))",
-  pie11: "var(--pie11, rgb(255, 32, 255))",
-  pie12: "var(--pie12, rgb(32, 255, 143))",
+  pieTitleTextColor: "var(--textColor, #333)",
+  pieLegendTextColor: "var(--textColor, #333)",
 };
 
 export default `

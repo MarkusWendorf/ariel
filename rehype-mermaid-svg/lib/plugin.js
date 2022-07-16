@@ -31,13 +31,14 @@ export function rehypeMermaidSvg(options) {
                 });
             }
         });
-        const diagrams = await Promise.all(nodesToModify.map(async (node) => {
+        const svgList = await Promise.all(nodesToModify.map(async (node) => {
             const svg = await options.renderDiagram(node.diagram);
             return svgToHtmlAst(svg);
         }));
-        for (let i = 0; i < nodesToModify.length; i++) {
+        for (let i = 0; i < svgList.length; i++) {
             const node = nodesToModify[i].node;
-            node.children[0] = diagrams[i];
+            const svg = svgList[i];
+            node.children[0] = svg;
             node.tagName = "div";
             node.properties = {
                 className: "diagram",

@@ -54,7 +54,7 @@ export class ArielStack extends Stack {
       defaultBehavior: {
         origin: new HttpOrigin(apiDomain),
         cachePolicy: new CachePolicy(this, "CacheForeverPolicy", {
-          minTtl: Duration.seconds(0),
+          minTtl: Duration.seconds(300),
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },

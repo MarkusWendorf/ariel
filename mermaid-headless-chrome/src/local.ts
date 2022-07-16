@@ -6,27 +6,14 @@ import { base64ToString, stringToBase64 } from "./util/base64";
 process.on("SIGINT", () => process.exit(0));
 
 run(
-  stringToBase64(`classDiagram
-  Animal <|-- Duck
-  Animal <|-- Fish
-  Animal <|-- Zebra
-  Animal : +int age
-  Animal : +String gender
-  Animal: +isMammal()
-  Animal: +mate()
-  class Duck{
-      +String beakColor
-      +swim()
-      +quack()
-  }
-  class Fish{
-      -int sizeInFeet
-      -canEat()
-  }
-  class Zebra{
-      +bool is_wild
-      +run()
-  }`),
+  stringToBase64(`stateDiagram-v2
+  [*] --> Still
+  Still --> [*]
+
+  Still --> Moving
+  Moving --> Still
+  Moving --> Crash
+  Crash --> [*]`),
 );
 
 async function run(diagramBase64: string) {

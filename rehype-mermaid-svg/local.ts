@@ -9,7 +9,7 @@ async function main() {
   const file = await unified()
     .use(remarkParse)
     .use(remarkRehype)
-    .use(rehypeMermaidSvg, "d3gxhhtylnztw7.cloudfront.net")
+    .use(rehypeMermaidSvg, { renderDiagram })
     .use(rehypeStringify)
     .process(readFileSync("./examples/diagram.md", "utf-8"));
 
@@ -17,7 +17,16 @@ async function main() {
     mkdirSync("./dist");
   }
 
-  writeFileSync("./dist/diagram.html", file.value, {flag: ""});
+  writeFileSync("./dist/diagram.html", file.value, { flag: "" });
+}
+
+async function renderDiagram(diagram: string) {
+  const domain = "mermaid.irrlicht.io";
+  const svgBase64 = btoa(diagram);
+
+  return fetch(`https://${domain}/${svgBase64}`).then((response) =>
+    response.text()
+  );
 }
 
 // console.log(t());
