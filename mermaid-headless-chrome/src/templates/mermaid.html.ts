@@ -3,10 +3,18 @@ const styles = {
   mainBkg: "var(--mainBkg, #ECECFF)",
   edgeLabelBackground: "var(--edgeLabelBackground, #e8e8e8)",
   lineColor: "var(--lineColor, #333)",
+  nodeBorder: "var(--nodeBorder, #9370DB)",
+
+  // note
+  noteBkgColor: "var(--noteBkgColor, #fff5ad)",
+  noteBorderColor: "var(--noteBorderColor, #aaaa33)",
 
   // sequence
   actorTextColor: "var(--actorTextColor)",
   actorBorder: "var(--actorBorder)",
+
+  // class
+  classText: "var(--textColor, #333)",
 
   // gantt
   altSectionBkgColor: "var(--altSectionBkgColor, white)",

@@ -1,2 +1,5 @@
 import { type Transformer } from "unified";
-export declare function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer;
+export interface Options {
+    renderDiagram: (diagram: string) => Promise<string>;
+}
+export declare function rehypeMermaidSvg(options: Options): Transformer;

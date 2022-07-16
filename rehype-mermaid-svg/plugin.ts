@@ -8,9 +8,13 @@ import { type Element, matches } from "hast-util-select";
 import fetch from "node-fetch";
 import type { Text } from "hast";
 
-export function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer {
+export interface Options {
+  renderDiagram: (diagram: string) => Promise<string>;
+}
+
+export function rehypeMermaidSvg(options: Options): Transformer {
   return async (tree) => {
-    const nodesToModify: Array<{ node: Element; svgBase64: string }> = [];
+    const nodesToModify: Array<{ node: Element; diagram: string }> = [];
 
     visit(tree, (node, idx, parent) => {
       /* Looking for a tree like this
@@ -35,32 +39,26 @@ export function rehypeMermaidSvg(mermaidRendererDomain: string): Transformer {
       if (is<Text>(diagramText, "text") && diagramText.value) {
         nodesToModify.push({
           node: parent,
-          svgBase64: btoa(diagramText.value),
+          diagram: diagramText.value,
         });
       }
     });
 
-    await Promise.all(
-      nodesToModify.map(({ node, svgBase64 }) =>
-        renderDiagramToNode(mermaidRendererDomain, node, svgBase64)
-      )
+    const diagrams = await Promise.all(
+      nodesToModify.map(async (node) => {
+        const svg = await options.renderDiagram(node.diagram);
+        return svgToHtmlAst(svg);
+      })
     );
-  };
-}
 
-async function renderDiagramToNode(
-  mermaidRendererDomain: string,
-  parent: Element,
-  svgBase64: string
-) {
-  const svg = await fetch(`https://${mermaidRendererDomain}/${svgBase64}`).then(
-    (response) => response.text()
-  );
-
-  parent.children[0] = svgToHtmlAst(svg);
-  parent.tagName = "div";
-  parent.properties = {
-    className: "diagram",
+    for (let i = 0; i < nodesToModify.length; i++) {
+      const node = nodesToModify[i].node;
+      node.children[0] = diagrams[i];
+      node.tagName = "div";
+      node.properties = {
+        className: "diagram",
+      };
+    }
   };
 }
 

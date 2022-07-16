@@ -4,8 +4,7 @@ import { fromParse5 } from "hast-util-from-parse5";
 import { is } from "unist-util-is";
 import { isElement } from "hast-util-is-element";
 import { matches } from "hast-util-select";
-import fetch from "node-fetch";
-export function rehypeMermaidSvg(mermaidRendererDomain) {
+export function rehypeMermaidSvg(options) {
     return async (tree) => {
         const nodesToModify = [];
         visit(tree, (node, idx, parent) => {
@@ -28,19 +27,22 @@ export function rehypeMermaidSvg(mermaidRendererDomain) {
             if (is(diagramText, "text") && diagramText.value) {
                 nodesToModify.push({
                     node: parent,
-                    svgBase64: btoa(diagramText.value),
+                    diagram: diagramText.value,
                 });
             }
         });
-        await Promise.all(nodesToModify.map(({ node, svgBase64 }) => renderDiagramToNode(mermaidRendererDomain, node, svgBase64)));
-    };
-}
-async function renderDiagramToNode(mermaidRendererDomain, parent, svgBase64) {
-    const svg = await fetch(`https://${mermaidRendererDomain}/${svgBase64}`).then((response) => response.text());
-    parent.children[0] = svgToHtmlAst(svg);
-    parent.tagName = "div";
-    parent.properties = {
-        className: "diagram",
+        const diagrams = await Promise.all(nodesToModify.map(async (node) => {
+            const svg = await options.renderDiagram(node.diagram);
+            return svgToHtmlAst(svg);
+        }));
+        for (let i = 0; i < nodesToModify.length; i++) {
+            const node = nodesToModify[i].node;
+            node.children[0] = diagrams[i];
+            node.tagName = "div";
+            node.properties = {
+                className: "diagram",
+            };
+        }
     };
 }
 function svgToHtmlAst(svg) {

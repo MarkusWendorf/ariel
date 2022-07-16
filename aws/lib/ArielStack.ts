@@ -18,7 +18,7 @@ export class ArielStack extends Stack {
 
     const func = new Function(this, "MermaidLambda", {
       runtime: Runtime.NODEJS_14_X,
-      memorySize: 2048,
+      memorySize: 4096,
       code: Code.fromAsset(
         path.join(
           process.cwd(),
@@ -54,7 +54,7 @@ export class ArielStack extends Stack {
       defaultBehavior: {
         origin: new HttpOrigin(apiDomain),
         cachePolicy: new CachePolicy(this, "CacheForeverPolicy", {
-          minTtl: Duration.days(365),
+          minTtl: Duration.seconds(0),
         }),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
