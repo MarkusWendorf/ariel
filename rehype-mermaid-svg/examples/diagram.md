@@ -1,6 +1,6 @@
 Test Diagram
 
-```mermaid x=400 y=400
+```mermaid height=200px width=2rem
 graph TD;
     A-->B;
     A-->C;

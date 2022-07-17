@@ -12,7 +12,6 @@ export interface Options {
 }
 
 export function rehypeMermaidSvg(options: Options): Transformer {
-  console.log("yooo");
   return async (tree) => {
     const nodesToModify: Array<{
       node: Element;
@@ -41,12 +40,7 @@ export function rehypeMermaidSvg(options: Options): Transformer {
 
       const diagramText = node.children[0];
       if (is<Text>(diagramText, "text") && diagramText.value) {
-        const data = parent.children?.[0]?.data;
-
-        let meta: string | undefined = undefined;
-        if (typeof data?.meta === "string") {
-          meta = data.meta;
-        }
+        const meta = node?.data?.meta as string | undefined;
 
         nodesToModify.push({
           meta,
@@ -73,7 +67,7 @@ export function rehypeMermaidSvg(options: Options): Transformer {
       node.tagName = "div";
       node.properties = {
         className: "diagram",
-        ...metadata,
+        style: styles(metadata),
       };
     }
   };
@@ -100,11 +94,22 @@ function parseMetadata(data: string | undefined) {
   const keyValuePairs = data.split(/\s/).map((segment) => {
     const [key, value] = segment.split("=");
     if (key && value) {
-      return [`data${key}`, value];
+      return [key, value];
     }
 
     return [];
   });
 
   return Object.fromEntries(keyValuePairs);
+}
+
+function styles(metadata?: Record<string, unknown>) {
+  if (!metadata) return "";
+
+  const keys = ["height", "width"];
+  const style = keys
+    .map((key) => (metadata[key] ? `${key}:${metadata[key]}` : ""))
+    .join(";");
+
+  return style;
 }
