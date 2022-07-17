@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "chrome-aws-lambda": "^10.1.0",
-    "playwright-chromium": "^1.21.1"
+    "playwright-chromium": "^1.21.1",
+    "ts-retry-promise": "^0.6.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.95",

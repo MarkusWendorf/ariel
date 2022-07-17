@@ -9,7 +9,7 @@ export async function initChrome() {
       args: chrome.args,
       executablePath: chromeBinary,
       headless: chrome.headless,
-    })
+    });
   }
 
   return chromium.launch();
