@@ -5,7 +5,6 @@ import { fromParse5 } from "hast-util-from-parse5";
 import { is } from "unist-util-is";
 import { isElement } from "hast-util-is-element";
 import { type Element, matches } from "hast-util-select";
-import fetch from "node-fetch";
 import type { Text } from "hast";
 
 export interface Options {
@@ -13,10 +12,15 @@ export interface Options {
 }
 
 export function rehypeMermaidSvg(options: Options): Transformer {
+  console.log("yooo");
   return async (tree) => {
-    const nodesToModify: Array<{ node: Element; diagram: string }> = [];
+    const nodesToModify: Array<{
+      node: Element;
+      diagram: string;
+      meta?: string;
+    }> = [];
 
-    visit(tree, (node, idx, parent) => {
+    visit(tree, (node, idx, parent: unknown) => {
       /* Looking for a tree like this
         <pre>
           <code class="language-mermaid">  <-- node
@@ -37,7 +41,15 @@ export function rehypeMermaidSvg(options: Options): Transformer {
 
       const diagramText = node.children[0];
       if (is<Text>(diagramText, "text") && diagramText.value) {
+        const data = parent.children?.[0]?.data;
+
+        let meta: string | undefined = undefined;
+        if (typeof data?.meta === "string") {
+          meta = data.meta;
+        }
+
         nodesToModify.push({
+          meta,
           node: parent,
           diagram: diagramText.value,
         });
@@ -52,13 +64,16 @@ export function rehypeMermaidSvg(options: Options): Transformer {
     );
 
     for (let i = 0; i < svgList.length; i++) {
-      const node = nodesToModify[i].node;
+      const { node, meta } = nodesToModify[i];
       const svg = svgList[i];
+
+      const metadata = parseMetadata(meta);
 
       node.children[0] = svg;
       node.tagName = "div";
       node.properties = {
         className: "diagram",
+        ...metadata,
       };
     }
   };
@@ -77,4 +92,19 @@ function svgToHtmlAst(svg: string) {
   }
 
   return hastTree;
+}
+
+function parseMetadata(data: string | undefined) {
+  if (!data) return undefined;
+
+  const keyValuePairs = data.split(/\s/).map((segment) => {
+    const [key, value] = segment.split("=");
+    if (key && value) {
+      return [`data${key}`, value];
+    }
+
+    return [];
+  });
+
+  return Object.fromEntries(keyValuePairs);
 }

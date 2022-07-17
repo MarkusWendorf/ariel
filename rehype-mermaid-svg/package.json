@@ -19,13 +19,13 @@
     "rehype-stringify": "^9.0.3",
     "remark-parse": "^10.0.1",
     "remark-rehype": "^10.1.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "node-fetch": "^3.2.6"
   },
   "dependencies": {
     "hast-util-from-parse5": "^7.1.0",
     "hast-util-is-element": "^2.1.2",
     "hast-util-select": "^5.0.2",
-    "node-fetch": "^3.2.6",
     "parse5": "^7.0.0",
     "tsx": "^3.6.0",
     "unified": "^10.1.2",
