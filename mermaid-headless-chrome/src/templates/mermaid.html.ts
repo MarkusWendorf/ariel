@@ -61,7 +61,7 @@ export default `
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <title>Page Titles</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
       <script>
         mermaid.initialize({ 
           startOnLoad:false, 
